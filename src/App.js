@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 
 import { useState } from 'react';
 import { Label, LineChart, Line, XAxis, YAxis } from 'recharts'
-import { CartesianGrid, Tooltip, Legend } from 'recharts'
+import { CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { forecast } from './sir.js'
 
 export function App() {
@@ -60,10 +60,10 @@ export function App() {
   }
 
   const chartMargin = {
-    top: 0,
-    right: 0,
+    top: 10,
+    right: 20,
     left: 20,
-    bottom: 0,
+    bottom: 20,
   }
 
   const Value = (props) => <i>{props.value}</i>
@@ -73,21 +73,20 @@ export function App() {
       <h1> SIR Model as Discrete-time Markov Chain </h1>
 
       <div>
-        <TextField id="S-input" label="S"
+        <TextField id="S-input" label="S" size="small"
           defaultValue={defaults.initState.S}
           onChange={handleS}
         />
-        <TextField id="I-input" label="I"
+        <TextField id="I-input" label="I" size="small"
           defaultValue={defaults.initState.I}
           onChange={handleI}
         />
-        <TextField id="R-input" label="R" disabled
+        <TextField id="R-input" label="R" size="small" disabled
           defaultValue={defaults.initState.R}
         />
         <br/>
         <Button
-          className="sir-btn"
-          variant="contained"
+          className="sir-btn" variant="contained" size="small"
           onClick={handleInitState}>
           Reset initial state
         </Button>
@@ -132,21 +131,25 @@ export function App() {
         />
       </Box>
 
-      <LineChart width={500} height={300} data={path} margin={chartMargin} >
-        <XAxis dataKey="day">
-          <Label value="Day" postition="bottom" dy={25} />
-        </XAxis>
-        <YAxis type="number" domain={[0, 1]}>
-           <Label angle={-90} value='Proportion'
-                  position='insideLeft' style={{textAnchor: 'middle'}}/>
-        </YAxis>
-        <Tooltip formatter={ (value) => `${(+value * 100).toFixed(3)}%`} position={{y: 300}}/>
-        <Legend align="right"/>
-        <CartesianGrid stroke="#eee" />
-        <Line  dataKey="S" dot={false} strokeWidth="2" stroke="red" />
-        <Line  dataKey="I" dot={false} strokeWidth="2" stroke="blue" />
-        <Line  dataKey="R" dot={false} strokeWidth="2" stroke="orange" />
-      </LineChart>
+      <ResponsiveContainer width="80%" aspect={5.0 / 4.0} minWidth="0">
+        <LineChart data={path} margin={chartMargin} >
+          <XAxis dataKey="day">
+            <Label value="Day" postition="bottom" dy={25} />
+          </XAxis>
+          <YAxis type="number" domain={[0, 1]}>
+             <Label angle={-90} value='Proportion'
+                    position='insideLeft' style={{textAnchor: 'middle'}}/>
+          </YAxis>
+          <Tooltip formatter={ (value) => `${(+value * 100).toFixed(3)}%`} position={{y: -120}}/>
+          <Legend align="top"/>
+          <CartesianGrid stroke="#eee" />
+          <Line  dataKey="S" dot={false} strokeWidth="2" stroke="red" />
+          <Line  dataKey="I" dot={false} strokeWidth="2" stroke="blue" />
+          <Line  dataKey="R" dot={false} strokeWidth="2" stroke="orange" />
+        </LineChart>
+      </ResponsiveContainer>
+
+      <br/>
     </div>
   );
 }
