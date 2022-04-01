@@ -1,11 +1,13 @@
 import './App.css'
 
-import Button from '@mui/material/Button';
-import Slider from '@mui/material/Slider';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Slider from '@mui/material/Slider'
+import Switch from '@mui/material/Switch'
+import Typography from '@mui/material/Typography'
+import TextField from '@mui/material/TextField'
 
-import { useState } from 'react';
+import { useState } from 'react'
 import { Label, LineChart, Line, XAxis, YAxis } from 'recharts'
 import { CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { forecast } from './sir.js'
@@ -18,6 +20,7 @@ export function App() {
     days: 100
   }
 
+  const [smooth, setSmooth] = useState("natural")
   const [initState, setInitState] = useState(defaults.initState)
   const [infectRate, setInfectRate] = useState(defaults.infectRate)
   const [recoverRate, setRecoverRate] = useState(defaults.recoverRate)
@@ -56,6 +59,14 @@ export function App() {
     const I = +event.target.value
     const R = (1 - S - I).toFixed(6)
     document.getElementById("R-input").value = R
+  }
+
+  const handleSmooth = (event) => {
+    if (smooth === "linear") {
+      setSmooth("natural")
+    } else {
+      setSmooth("linear")
+    }
   }
 
   const chartMargin = {
@@ -143,11 +154,17 @@ export function App() {
             <Tooltip formatter={ (value) => `${(+value * 100).toFixed(3)}%`} position={{y: -120}}/>
             <Legend align="left"/>
             <CartesianGrid stroke="#eee" />
-            <Line  dataKey="S" dot={false} strokeWidth="2" stroke="red" />
-            <Line  dataKey="I" dot={false} strokeWidth="2" stroke="blue" />
-            <Line  dataKey="R" dot={false} strokeWidth="2" stroke="orange" />
+            <Line type={smooth} dataKey="S" dot={false} strokeWidth="2" stroke="red" />
+            <Line type={smooth} dataKey="I" dot={false} strokeWidth="2" stroke="blue" />
+            <Line type={smooth} dataKey="R" dot={false} strokeWidth="2" stroke="orange" />
           </LineChart>
         </ResponsiveContainer>
+        <FormControlLabel 
+          control={
+            <Switch defaultChecked size="small" onChange={handleSmooth}/>
+          }
+          label="Smooth"
+        />
       </div>
 
       <br/>
