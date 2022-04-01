@@ -72,7 +72,8 @@ export function App() {
     <div className="App">
       <h1> SIR Model as Discrete-time Markov Chain </h1>
 
-      <div>
+      <h2>Input Parameters</h2>
+      <div className="sir-inputs">
         <TextField id="S-input" label="S" size="small"
           defaultValue={defaults.initState.S}
           onChange={handleS}
@@ -86,68 +87,69 @@ export function App() {
         />
         <br/>
         <Button
-          className="sir-btn" variant="contained" size="small"
+          variant="contained" size="small"
           onClick={handleInitState}>
           Reset initial state
         </Button>
+        <br/>
+        <br/>
+
+        <div className="sir-slider">
+          <Typography className="sir-typo">
+            Infection Rate: <Value value={infectRate}/>
+          </Typography>
+          <Slider
+            size="small"
+            defaultValue={defaults.infectRate}
+            min={0} max={1} step={1e-4}
+            onChange={handleInfectRateSlider}
+            valueLabelDisplay="auto"
+          />
+
+          <Typography className="sir-typo">
+            Recovery Rate: <Value value={recoverRate}/>
+          </Typography>
+          <Slider
+            size="small"
+            defaultValue={defaults.recoverRate}
+            min={0} max={1} step={1e-4}
+            onChange={handleRecoverRateSlider}
+            valueLabelDisplay="auto"
+          />
+
+          <Typography className="sir-typo">
+            Days: <Value value={days}/>
+          </Typography>
+          <Slider
+            size="small"
+            defaultValue={defaults.days}
+            min={1} max={1000} step={1}
+            onChange={handleDaySlider}
+            valueLabelDisplay="auto"
+          />
+        </div>
       </div>
 
-      <Box className="sir-box">
-        <Typography>
-          Infection Rate: <Value value={infectRate}/>
-        </Typography>
-        <Slider
-          size="small"
-          defaultValue={defaults.infectRate}
-          min={0} max={1} step={1e-4}
-          onChange={handleInfectRateSlider}
-          valueLabelDisplay="auto"
-        />
-      </Box>
-
-      <Box className="sir-box">
-        <Typography>
-          Recovery Rate: <Value value={recoverRate}/>
-        </Typography>
-        <Slider
-          size="small"
-          defaultValue={defaults.recoverRate}
-          min={0} max={1} step={1e-4}
-          onChange={handleRecoverRateSlider}
-          valueLabelDisplay="auto"
-        />
-      </Box>
-
-      <Box className="sir-box">
-        <Typography>
-          Days: <Value value={days}/>
-        </Typography>
-        <Slider
-          size="small"
-          defaultValue={defaults.days}
-          min={1} max={1000} step={1}
-          onChange={handleDaySlider}
-          valueLabelDisplay="auto"
-        />
-      </Box>
-
-      <ResponsiveContainer width="80%" aspect={5.0 / 4.0} minWidth="0">
-        <LineChart data={path} margin={chartMargin} >
-          <XAxis dataKey="day">
-            <Label value="Day" postition="bottom" dy={25} />
-          </XAxis>
-          <YAxis type="number" domain={[0, 1]}>
-             <Label angle={-90} value='Proportion'
-                    position='insideLeft' style={{textAnchor: 'middle'}}/>
-          </YAxis>
-          <Tooltip formatter={ (value) => `${(+value * 100).toFixed(3)}%`} position={{y: -120}}/>
-          <Legend align="top"/>
-          <CartesianGrid stroke="#eee" />
-          <Line  dataKey="S" dot={false} strokeWidth="2" stroke="red" />
-          <Line  dataKey="I" dot={false} strokeWidth="2" stroke="blue" />
-          <Line  dataKey="R" dot={false} strokeWidth="2" stroke="orange" />
-        </LineChart>
-      </ResponsiveContainer>
+      <h2>Foreacst</h2>
+      <div className="sir-fig">
+        <ResponsiveContainer width="100%" aspect={5.0 / 4.0} minWidth="0">
+          <LineChart data={path} margin={chartMargin} >
+            <XAxis dataKey="day">
+              <Label value="Day" postition="bottom" dy={25} />
+            </XAxis>
+            <YAxis type="number" domain={[0, 1]}>
+               <Label angle={-90} value='Proportion'
+                      position='insideLeft' style={{textAnchor: 'middle'}}/>
+            </YAxis>
+            <Tooltip formatter={ (value) => `${(+value * 100).toFixed(3)}%`} position={{y: -120}}/>
+            <Legend align="left"/>
+            <CartesianGrid stroke="#eee" />
+            <Line  dataKey="S" dot={false} strokeWidth="2" stroke="red" />
+            <Line  dataKey="I" dot={false} strokeWidth="2" stroke="blue" />
+            <Line  dataKey="R" dot={false} strokeWidth="2" stroke="orange" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
       <br/>
     </div>
